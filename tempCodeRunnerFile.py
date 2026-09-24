@@ -1,2 +1,1 @@
-    # def _coba_login():
-    #     messagebox.showinfo("Cihuy", "Cihuy bang")
+buat_tampilan
