@@ -65,340 +65,919 @@ class AplikasiBiodata(tk.Tk):
         else:
             self.title("Login - Sistem Biodata Mahasiswa")
 
-    # ------------------ HALAMAN 1: LOGIN (GERBANG AWAL) ------------------
-    def _buat_tampilan_login(self):
-        self.frame_login = tk.Frame(master=self, padx=30, pady=40)
-        self.frame_login.grid_columnconfigure(0, weight=0)
-        self.frame_login.grid_columnconfigure(1, weight=1)
+        # ------------------ CUSTOM MESSAGE BOX ------------------
+    def custom_messagebox(self, title, message, tipe="info", confirm=False):
+        popup = tk.Toplevel(self)
+        popup.title(title)
+        popup.geometry("390x230")
+        popup.resizable(False, False)
+        popup.configure(bg="#f8fafc")
 
-        # Judul Form Login
+        # Supaya popup berada di tengah window utama
+        popup.transient(self)
+        popup.grab_set()
+
+        # Warna berdasarkan tipe popup
+        warna = {
+            "success": "#16a34a",
+            "info": "#2563eb",
+            "warning": "#f59e0b",
+            "error": "#dc2626"
+        }
+
+        icon = {
+            "success": "✓",
+            "info": "i",
+            "warning": "!",
+            "error": "×"
+        }
+
+        warna_utama = warna.get(tipe, "#2563eb")
+        icon_popup = icon.get(tipe, "i")
+
+        # Header
+        header = tk.Frame(
+            popup,
+            bg=warna_utama,
+            height=65
+        )
+        header.pack(fill=tk.X)
+        header.pack_propagate(False)
+
+        # Icon
+        label_icon = tk.Label(
+            header,
+            text=icon_popup,
+            font=("Segoe UI", 22, "bold"),
+            bg=warna_utama,
+            fg="white"
+        )
+        label_icon.pack(side=tk.LEFT, padx=(25, 10))
+
+        # Judul
+        label_title = tk.Label(
+            header,
+            text=title,
+            font=("Segoe UI", 14, "bold"),
+            bg=warna_utama,
+            fg="white"
+        )
+        label_title.pack(side=tk.LEFT)
+
+        # Isi pesan
+        label_message = tk.Label(
+            popup,
+            text=message,
+            font=("Segoe UI", 10),
+            bg="#f8fafc",
+            fg="#334155",
+            justify=tk.CENTER,
+            wraplength=330
+        )
+        label_message.pack(
+            fill=tk.X,
+            padx=25,
+            pady=(25, 15)
+        )
+
+        # Container tombol
+        frame_button = tk.Frame(
+            popup,
+            bg="#f8fafc"
+        )
+        frame_button.pack(fill=tk.X, pady=(5, 20))
+
+        # Tombol OK
+        def tutup_popup():
+            popup.grab_release()
+            popup.destroy()
+
+        btn_ok = tk.Button(
+            frame_button,
+            text="OK",
+            font=("Segoe UI", 10, "bold"),
+            bg=warna_utama,
+            fg="white",
+            activebackground=warna_utama,
+            activeforeground="white",
+            relief=tk.FLAT,
+            bd=0,
+            padx=25,
+            pady=8,
+            cursor="hand2",
+            command=tutup_popup
+        )
+        btn_ok.pack(side=tk.RIGHT, padx=(5, 25))
+
+        # Kalau popup konfirmasi
+        if confirm:
+            def batal():
+                popup.grab_release()
+                popup.destroy()
+
+            btn_ok.config(text="Ya")
+
+            btn_batal = tk.Button(
+                frame_button,
+                text="Batal",
+                font=("Segoe UI", 10),
+                bg="#e2e8f0",
+                fg="#334155",
+                activebackground="#cbd5e1",
+                relief=tk.FLAT,
+                bd=0,
+                padx=20,
+                pady=8,
+                cursor="hand2",
+                command=batal
+            )
+            btn_batal.pack(side=tk.RIGHT)
+
+        # Enter = OK
+        popup.bind("<Return>", lambda event: tutup_popup())
+        popup.bind("<Escape>", lambda event: tutup_popup())
+
+        # Fokus
+        popup.focus_force()
+
+        # Posisi tengah layar
+        popup.update_idletasks()
+
+        x = self.winfo_x() + (self.winfo_width() // 2) - (390 // 2)
+        y = self.winfo_y() + (self.winfo_height() // 2) - (230 // 2)
+
+        popup.geometry(f"390x230+{x}+{y}")
+    # ------------------ HALAMAN 1: LOGIN (GERBANG AWAL) ------------------
+    def button_hover(self, button, normal, hover):
+            button.bind(
+                "<Enter>",
+                lambda e: button.config(bg=hover)
+            )
+    
+            button.bind(
+                "<Leave>",
+                lambda e: button.config(bg=normal)
+            )
+    
+    def _buat_tampilan_login(self):
+        self.frame_login = tk.Frame(
+            master=self,
+            padx=45,
+            pady=40,
+            bg="#f1f5f9"
+        )
+
+        self.frame_login.grid_columnconfigure(0, weight=1)
+
+        # =========================
+        # JUDUL
+        # =========================
         tk.Label(
             self.frame_login,
             text="LOGIN SISTEM",
-            font=("Arial", 16, "bold"),
-        ).grid(row=0, column=0, columnspan=2, pady=(0, 25))
-
-        # Username Input
-        tk.Label(self.frame_login, text="Username:", font=("Arial", 11)).grid(
-            row=1, column=0, sticky="W", pady=8
+            font=("Segoe UI", 20, "bold"),
+            bg="#f1f5f9",
+            fg="#0f172a"
+        ).grid(
+            row=0,
+            column=0,
+            pady=(20, 25)
         )
-        self.entry_username = tk.Entry(self.frame_login, font=("Arial", 11))
-        self.entry_username.grid(row=1, column=1, pady=8, sticky="EW")
 
-        # Password Input
-        tk.Label(self.frame_login, text="Password:", font=("Arial", 11)).grid(
-            row=2, column=0, sticky="W", pady=8
-        )
-        self.entry_password = tk.Entry(
-            self.frame_login, font=("Arial", 11), show="*"
-        )
-        self.entry_password.grid(row=2, column=1, pady=8, sticky="EW")
-
-        # Tombol Aksi Login
-        self.btn_login = tk.Button(
+        # =========================
+        # CARD LOGIN
+        # =========================
+        card_login = tk.Frame(
             self.frame_login,
+            bg="#ffffff",
+            padx=30,
+            pady=30,
+            highlightbackground="#e2e8f0",
+            highlightthickness=1
+        )
+
+        card_login.grid(
+            row=1,
+            column=0,
+            sticky="EW"
+        )
+
+        card_login.columnconfigure(0, weight=1)
+
+        # =========================
+        # USERNAME
+        # =========================
+        tk.Label(
+            card_login,
+            text="Username",
+            font=("Segoe UI", 10, "bold"),
+            bg="#ffffff",
+            fg="#334155"
+        ).grid(
+            row=0,
+            column=0,
+            sticky="W",
+            pady=(0, 6)
+        )
+
+        self.entry_username = tk.Entry(
+            card_login,
+            font=("Segoe UI", 11),
+            relief=tk.FLAT,
+            bg="#f8fafc",
+            fg="#0f172a",
+            insertbackground="#2563eb"
+        )
+
+        self.entry_username.grid(
+            row=1,
+            column=0,
+            sticky="EW",
+            ipady=8,
+            pady=(0, 18)
+        )
+
+        # =========================
+        # PASSWORD
+        # =========================
+        tk.Label(
+            card_login,
+            text="Password",
+            font=("Segoe UI", 10, "bold"),
+            bg="#ffffff",
+            fg="#334155"
+        ).grid(
+            row=2,
+            column=0,
+            sticky="W",
+            pady=(0, 6)
+        )
+
+        self.entry_password = tk.Entry(
+            card_login,
+            font=("Segoe UI", 11),
+            show="*",
+            relief=tk.FLAT,
+            bg="#f8fafc",
+            fg="#0f172a",
+            insertbackground="#2563eb"
+        )
+
+        self.entry_password.grid(
+            row=3,
+            column=0,
+            sticky="EW",
+            ipady=8,
+            pady=(0, 20)
+        )
+
+        # =========================
+        # BUTTON LOGIN
+        # =========================
+        self.btn_login = tk.Button(
+            card_login,
             text="Masuk",
-            font=("Arial", 11, "bold"),
+            font=("Segoe UI", 10, "bold"),
             bg="#2563eb",
             fg="white",
+            activebackground="#1d4ed8",
+            activeforeground="white",
+            relief=tk.FLAT,
+            bd=0,
             cursor="hand2",
-            command=self._coba_login,
+            padx=15,
+            pady=10,
+            command=self._coba_login
         )
-        self.btn_login.grid(row=3, column=0, columnspan=2, pady=20, sticky="EW")
 
-        # Shortcut Enter pada login
-        self.entry_username.bind(
-            "<Return>", lambda e: self.entry_password.focus_set()
+        self.btn_login.grid(
+            row=4,
+            column=0,
+            sticky="EW"
         )
-        self.entry_password.bind("<Return>", lambda e: self._coba_login())
 
-        # Petunjuk Akun Uji Coba
+        self.button_hover(
+            self.btn_login,
+            "#2563eb",
+            "#1d4ed8"
+        )
+
+        # =========================
+        # INFO AKUN
+        # =========================
         info_label = tk.Label(
             self.frame_login,
-            text="Akun tersedia:\n• admin (password: 123)\n• user1 (password: password1)\n• mahasiswa (password: 123456)",
-            font=("Arial", 9),
+            text=(
+                "Akun tersedia:\n"
+                "• admin  (password: 123)\n"
+                "• user1  (password: password1)\n"
+                "• mahasiswa  (password: 123456)"
+            ),
+            font=("Segoe UI", 9),
+            bg="#f1f5f9",
             fg="#64748b",
-            justify=tk.LEFT,
+            justify=tk.LEFT
         )
+
+        info_label.grid(
+            row=2,
+            column=0,
+            pady=(15, 10),
+            sticky="W"
+        )
+
+        # =========================
+        # SHORTCUT ENTER
+        # =========================
+        self.entry_username.bind(
+            "<Return>",
+            lambda e: self.entry_password.focus_set()
+        )
+
+        self.entry_password.bind(
+            "<Return>",
+            lambda e: self._coba_login()
+        )
+        
+            # Shortcut Enter pada login
+        self.entry_username.bind(
+                "<Return>", lambda e: self.entry_password.focus_set()
+            )
+        self.entry_password.bind("<Return>", lambda e: self._coba_login())
+
+            # Petunjuk Akun Uji Coba
+        info_label = tk.Label(
+                self.frame_login,
+                text="Akun tersedia:\n• admin (password: 123)\n• user1 (password: password1)\n• mahasiswa (password: 123456)",
+                font=("Arial", 9),
+                fg="#64748b",
+                justify=tk.LEFT,
+            )
         info_label.grid(row=4, column=0, columnspan=2, pady=10, sticky="W")
 
     def _coba_login(self):
-        username = self.entry_username.get().strip()
-        password = self.entry_password.get()
+            username = self.entry_username.get().strip()
+            password = self.entry_password.get()
 
-        if not username or not password:
-            messagebox.showwarning(
-                "Peringatan", "Username dan Password tidak boleh kosong."
-            )
-            self.entry_username.focus_set()
-            return
+            if not username or not password:
+                self.custom_messagebox(
+                    "Peringatan",
+                    "Username dan Password tidak boleh kosong.",
+                    "warning"
+                )
+                self.entry_username.focus_set()
+                return
 
-        if (
-            username in self.users_db
-            and self.users_db[username] == password
-        ):
-            self.current_user = username
-            messagebox.showinfo("Login Berhasil", f"Selamat datang, {username}!")
+            if (
+                username in self.users_db
+                and self.users_db[username] == password
+            ):
+                self.current_user = username
+                self.custom_messagebox(
+                    "Login Berhasil",
+                    f"Selamat datang, {username}!",
+                    "success"
+                )
 
-            # Pasang menu dan alihkan ke dashboard form biodata
-            self._buat_menu()
-            self._reset_form_biodata()
-            self._update_title()
-            self._pindah_ke(self.frame_biodata)
+                # Pasang menu dan alihkan ke dashboard form biodata
+                self._buat_menu()
+                self._reset_form_biodata()
+                self._update_title()
+                self._pindah_ke(self.frame_biodata)
 
-            # Bersihkan field input login
-            self.entry_username.delete(0, tk.END)
-            self.entry_password.delete(0, tk.END)
-        else:
-            messagebox.showerror(
-                "Login Gagal", "Username atau password yang dimasukkan salah."
-            )
-            self.entry_password.delete(0, tk.END)
-            self.entry_username.focus_set()
+                # Bersihkan field input login
+                self.entry_username.delete(0, tk.END)
+                self.entry_password.delete(0, tk.END)
+            else:
+                self.custom_messagebox(
+                    "Login Gagal",
+                    "Username atau password yang dimasukkan salah.",
+                    "error"
+                )
+                self.entry_password.delete(0, tk.END)
+                self.entry_username.focus_set()
 
     def _logout(self):
-        if messagebox.askyesno(
-            "Konfirmasi Logout", f"Yakin ingin keluar dari akun {self.current_user}?"
-        ):
-            self.current_user = None
-            self._hapus_menu()
-            self._update_title()
-            self._reset_form_biodata()
-            self._pindah_ke(self.frame_login)
-            self.entry_username.focus_set()
+            if messagebox.askyesno(
+                "Konfirmasi Logout", f"Yakin ingin keluar dari akun {self.current_user}?"
+            ):
+                self.current_user = None
+                self._hapus_menu()
+                self._update_title()
+                self._reset_form_biodata()
+                self._pindah_ke(self.frame_login)
+                self.entry_username.focus_set()
 
-    # ------------------ HALAMAN 2: FORM BIODATA (SETELAH LOGIN) ------------------
+        # ------------------ HALAMAN 2: FORM BIODATA (SETELAH LOGIN) ------------------
     def _buat_tampilan_biodata(self):
-        self.frame_biodata = tk.Frame(master=self, padx=20, pady=10)
+        # =========================
+        # FRAME UTAMA
+        # =========================
+        self.frame_biodata = tk.Frame(
+            master=self,
+            padx=35,
+            pady=25,
+            bg="#f1f5f9"
+        )
 
-        # Variabel kontrol data
+        self.frame_biodata.columnconfigure(0, weight=1)
+
+        # =========================
+        # VARIABEL KONTROL DATA
+        # =========================
         self.var_nama = tk.StringVar()
         self.var_nim = tk.StringVar()
         self.var_jurusan = tk.StringVar()
         self.var_jk = tk.StringVar(value="Pria")
         self.var_setuju = tk.IntVar(value=0)
 
-        # Tracing untuk validasi tombol submit secara real-time
+        # Validasi tombol submit secara real-time
         self.var_nama.trace_add("write", self.validate_form)
         self.var_nim.trace_add("write", self.validate_form)
         self.var_jurusan.trace_add("write", self.validate_form)
 
-        # Header Form
+        # =========================
+        # HEADER
+        # =========================
         label_judul = tk.Label(
             master=self.frame_biodata,
             text="FORM BIODATA MAHASISWA",
-            font=("Arial", 15, "bold"),
+            font=("Segoe UI", 20, "bold"),
+            bg="#f1f5f9",
+            fg="#0f172a"
         )
-        label_judul.pack(pady=10)
 
-        # Container Input
+        label_judul.pack(
+            pady=(5, 3)
+        )
+
+        label_subjudul = tk.Label(
+            master=self.frame_biodata,
+            text="Lengkapi informasi data mahasiswa",
+            font=("Segoe UI", 10),
+            bg="#f1f5f9",
+            fg="#64748b"
+        )
+
+        label_subjudul.pack(
+            pady=(0, 20)
+        )
+
+        # =========================
+        # CARD INPUT
+        # =========================
         frame_input = tk.Frame(
             master=self.frame_biodata,
-            relief=tk.GROOVE,
-            borderwidth=2,
-            padx=15,
-            pady=12,
+            bg="#ffffff",
+            padx=25,
+            pady=25,
+            highlightbackground="#e2e8f0",
+            highlightthickness=1
         )
-        frame_input.pack(fill=tk.X, expand=False)
-        frame_input.columnconfigure(1, weight=1)
 
-        # Nama
-        tk.Label(frame_input, text="Nama Lengkap:", font=("Arial", 10)).grid(
-            row=0, column=0, sticky="W", pady=5
+        frame_input.pack(
+            fill=tk.X,
+            expand=False
         )
+
+        frame_input.columnconfigure(
+            1,
+            weight=1
+        )
+
+        # =========================
+        # NAMA LENGKAP
+        # =========================
+        tk.Label(
+            frame_input,
+            text="Nama Lengkap:",
+            font=("Segoe UI", 10, "bold"),
+            bg="#ffffff",
+            fg="#334155"
+        ).grid(
+            row=0,
+            column=0,
+            sticky="W",
+            pady=7
+        )
+
         self.entry_nama = tk.Entry(
-            frame_input, font=("Arial", 10), textvariable=self.var_nama
+            frame_input,
+            font=("Segoe UI", 10),
+            textvariable=self.var_nama,
+            relief=tk.FLAT,
+            bg="#f8fafc",
+            fg="#0f172a",
+            insertbackground="#2563eb"
         )
-        self.entry_nama.grid(row=0, column=1, sticky="EW", pady=5)
 
+        self.entry_nama.grid(
+            row=0,
+            column=1,
+            sticky="EW",
+            pady=7,
+            padx=(15, 0),
+            ipady=7
+        )
+
+        # =========================
         # NIM
-        tk.Label(frame_input, text="NIM:", font=("Arial", 10)).grid(
-            row=1, column=0, sticky="W", pady=5
+        # =========================
+        tk.Label(
+            frame_input,
+            text="NIM:",
+            font=("Segoe UI", 10, "bold"),
+            bg="#ffffff",
+            fg="#334155"
+        ).grid(
+            row=1,
+            column=0,
+            sticky="W",
+            pady=7
         )
+
         self.entry_nim = tk.Entry(
-            frame_input, font=("Arial", 10), textvariable=self.var_nim
+            frame_input,
+            font=("Segoe UI", 10),
+            textvariable=self.var_nim,
+            relief=tk.FLAT,
+            bg="#f8fafc",
+            fg="#0f172a",
+            insertbackground="#2563eb"
         )
-        self.entry_nim.grid(row=1, column=1, sticky="EW", pady=5)
 
-        # Jurusan
-        tk.Label(frame_input, text="Jurusan:", font=("Arial", 10)).grid(
-            row=2, column=0, sticky="W", pady=5
+        self.entry_nim.grid(
+            row=1,
+            column=1,
+            sticky="EW",
+            pady=7,
+            padx=(15, 0),
+            ipady=7
         )
+
+        # =========================
+        # JURUSAN
+        # =========================
+        tk.Label(
+            frame_input,
+            text="Jurusan:",
+            font=("Segoe UI", 10, "bold"),
+            bg="#ffffff",
+            fg="#334155"
+        ).grid(
+            row=2,
+            column=0,
+            sticky="W",
+            pady=7
+        )
+
         self.entry_jurusan = tk.Entry(
-            frame_input, font=("Arial", 10), textvariable=self.var_jurusan
+            frame_input,
+            font=("Segoe UI", 10),
+            textvariable=self.var_jurusan,
+            relief=tk.FLAT,
+            bg="#f8fafc",
+            fg="#0f172a",
+            insertbackground="#2563eb"
         )
-        self.entry_jurusan.grid(row=2, column=1, sticky="EW", pady=5)
 
-        # Alamat (Text Area + Scrollbar)
-        tk.Label(frame_input, text="Alamat:", font=("Arial", 10)).grid(
-            row=3, column=0, sticky="NW", pady=5
+        self.entry_jurusan.grid(
+            row=2,
+            column=1,
+            sticky="EW",
+            pady=7,
+            padx=(15, 0),
+            ipady=7
         )
-        frame_alamat = tk.Frame(frame_input, relief=tk.SUNKEN, borderwidth=1)
-        frame_alamat.grid(row=3, column=1, sticky="EW", pady=5)
 
-        scrollbar_alamat = tk.Scrollbar(frame_alamat)
-        scrollbar_alamat.pack(side=tk.RIGHT, fill=tk.Y)
+        # =========================
+        # ALAMAT
+        # =========================
+        tk.Label(
+            frame_input,
+            text="Alamat:",
+            font=("Segoe UI", 10, "bold"),
+            bg="#ffffff",
+            fg="#334155"
+        ).grid(
+            row=3,
+            column=0,
+            sticky="NW",
+            pady=7
+        )
 
+        # Container textarea
+        frame_alamat = tk.Frame(
+            frame_input,
+            bg="#f8fafc",
+            highlightbackground="#e2e8f0",
+            highlightthickness=1
+        )
+
+        frame_alamat.grid(
+            row=3,
+            column=1,
+            sticky="EW",
+            pady=7,
+            padx=(15, 0)
+        )
+
+        # Scrollbar alamat
+        scrollbar_alamat = tk.Scrollbar(
+            frame_alamat
+        )
+
+        scrollbar_alamat.pack(
+            side=tk.RIGHT,
+            fill=tk.Y
+        )
+
+        # Text area
         self.text_alamat = tk.Text(
             frame_alamat,
             height=4,
-            font=("Arial", 10),
-            yscrollcommand=scrollbar_alamat.set,
+            font=("Segoe UI", 10),
+            bg="#f8fafc",
+            fg="#0f172a",
+            insertbackground="#2563eb",
+            relief=tk.FLAT,
+            yscrollcommand=scrollbar_alamat.set
         )
-        self.text_alamat.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scrollbar_alamat.config(command=self.text_alamat.yview)
 
-        # Jenis Kelamin
-        tk.Label(frame_input, text="Jenis Kelamin:", font=("Arial", 10)).grid(
-            row=4, column=0, sticky="W", pady=5
+        self.text_alamat.pack(
+            side=tk.LEFT,
+            fill=tk.BOTH,
+            expand=True,
+            padx=8,
+            pady=8
         )
-        frame_jk = tk.Frame(frame_input)
-        frame_jk.grid(row=4, column=1, sticky="W", pady=5)
 
-        tk.Radiobutton(
-            frame_jk, text="Pria", variable=self.var_jk, value="Pria"
-        ).pack(side=tk.LEFT, padx=(0, 15))
-        tk.Radiobutton(
-            frame_jk, text="Wanita", variable=self.var_jk, value="Wanita"
-        ).pack(side=tk.LEFT)
+        scrollbar_alamat.config(
+            command=self.text_alamat.yview
+        )
 
-        # Checkbox Persetujuan
+        # =========================
+        # JENIS KELAMIN
+        # =========================
+        tk.Label(
+            frame_input,
+            text="Jenis Kelamin:",
+            font=("Segoe UI", 10, "bold"),
+            bg="#ffffff",
+            fg="#334155"
+        ).grid(
+            row=4,
+            column=0,
+            sticky="W",
+            pady=7
+        )
+
+        frame_jk = tk.Frame(
+            frame_input,
+            bg="#ffffff"
+        )
+
+        frame_jk.grid(
+            row=4,
+            column=1,
+            sticky="W",
+            pady=7,
+            padx=(15, 0)
+        )
+
+        # Pria
+        tk.Radiobutton(
+            frame_jk,
+            text="Pria",
+            variable=self.var_jk,
+            value="Pria",
+            font=("Segoe UI", 10),
+            bg="#ffffff",
+            fg="#334155",
+            activebackground="#ffffff",
+            activeforeground="#334155",
+            selectcolor="#f8fafc"
+        ).pack(
+            side=tk.LEFT,
+            padx=(0, 20)
+        )
+
+        # Wanita
+        tk.Radiobutton(
+            frame_jk,
+            text="Wanita",
+            variable=self.var_jk,
+            value="Wanita",
+            font=("Segoe UI", 10),
+            bg="#ffffff",
+            fg="#334155",
+            activebackground="#ffffff",
+            activeforeground="#334155",
+            selectcolor="#f8fafc"
+        ).pack(
+            side=tk.LEFT
+        )
+
+        # =========================
+        # CHECKBOX PERSETUJUAN
+        # =========================
         check_setuju = tk.Checkbutton(
             frame_input,
             text="Saya menyetujui pengumpulan data ini.",
             variable=self.var_setuju,
-            font=("Arial", 9),
-            command=self.validate_form,
+            font=("Segoe UI", 9),
+            bg="#ffffff",
+            fg="#334155",
+            activebackground="#ffffff",
+            activeforeground="#334155",
+            selectcolor="#f8fafc",
+            command=self.validate_form
         )
-        check_setuju.grid(row=5, column=0, columnspan=2, sticky="W", pady=10)
 
-        # Tombol Submit (status awal: DISABLED)
+        check_setuju.grid(
+            row=5,
+            column=0,
+            columnspan=2,
+            sticky="W",
+            pady=(15, 0)
+        )
+
+        # =========================
+        # TOMBOL SUBMIT
+        # =========================
         self.btn_submit = tk.Button(
             self.frame_biodata,
             text="Simpan Data Biodata",
-            font=("Arial", 11, "bold"),
+            font=("Segoe UI", 10, "bold"),
+            bg="#2563eb",
+            fg="white",
+            activebackground="#1d4ed8",
+            activeforeground="white",
+            disabledforeground="#94a3b8",
+            relief=tk.FLAT,
+            bd=0,
+            cursor="hand2",
+            padx=15,
+            pady=10,
             command=self.submit_data,
-            state=tk.DISABLED,
+            state=tk.DISABLED
         )
-        self.btn_submit.pack(fill=tk.X, pady=10)
 
-        # Shortcut Enter pada entry
-        self.entry_nama.bind("<Return>", self.submit_shortcut)
-        self.entry_nim.bind("<Return>", self.submit_shortcut)
-        self.entry_jurusan.bind("<Return>", self.submit_shortcut)
+        self.btn_submit.pack(
+            fill=tk.X,
+            pady=(20, 10)
+        )
 
-        # Preview Data Tersimpan
+        self.button_hover(
+            self.btn_submit,
+            "#2563eb",
+            "#1d4ed8"
+        )
+
+        # =========================
+        # SHORTCUT ENTER
+        # =========================
+        self.entry_nama.bind(
+            "<Return>",
+            self.submit_shortcut
+        )
+
+        self.entry_nim.bind(
+            "<Return>",
+            self.submit_shortcut
+        )
+
+        self.entry_jurusan.bind(
+            "<Return>",
+            self.submit_shortcut
+        )
+
+        # =========================
+        # PREVIEW DATA TERSIMPAN
+        # =========================
         self.label_hasil = tk.Label(
             self.frame_biodata,
             text="",
-            font=("Arial", 10),
+            font=("Segoe UI", 10),
             justify=tk.LEFT,
-            fg="#1e293b",
+            bg="#f1f5f9",
+            fg="#1e293b"
         )
-        self.label_hasil.pack(anchor="w", padx=5, pady=5)
 
-    # ------------------ LOGIKA VALIDASI & AKSI BIODATA ------------------
+        self.label_hasil.pack(
+            anchor="w",
+            padx=5,
+            pady=5
+        )
     def validate_form(self, *args):
-        """Tombol submit hanya aktif jika nama, nim, jurusan, dan persetujuan terisi."""
-        nama_ada = self.var_nama.get().strip() != ""
-        nim_ada = self.var_nim.get().strip() != ""
-        jurusan_ada = self.var_jurusan.get().strip() != ""
-        setuju = self.var_setuju.get() == 1
+            """Tombol submit hanya aktif jika nama, nim, jurusan, dan persetujuan terisi."""
+            nama_ada = self.var_nama.get().strip() != ""
+            nim_ada = self.var_nim.get().strip() != ""
+            jurusan_ada = self.var_jurusan.get().strip() != ""
+            setuju = self.var_setuju.get() == 1
 
-        if nama_ada and nim_ada and jurusan_ada and setuju:
-            self.btn_submit.config(state=tk.NORMAL)
-        else:
-            self.btn_submit.config(state=tk.DISABLED)
+            if nama_ada and nim_ada and jurusan_ada and setuju:
+                self.btn_submit.config(state=tk.NORMAL)
+            else:
+                self.btn_submit.config(state=tk.DISABLED)
 
     def submit_shortcut(self, event=None):
-        if self.btn_submit["state"] == tk.NORMAL:
-            self.submit_data()
+            if self.btn_submit["state"] == tk.NORMAL:
+                self.submit_data()
 
     def submit_data(self):
-        """Submit data biodata dengan validasi lengkap"""
-        try:
-            # Cek checkbox
-            if self.var_setuju.get() == 0:
-                messagebox.showwarning("Peringatan", "Anda harus menyetujui pengumpulan data!")
-                return
+            """Submit data biodata dengan validasi lengkap"""
+            try:
+                # Cek checkbox
+                if self.var_setuju.get() == 0:
+                    messagebox.showwarning("Peringatan", "Anda harus menyetujui pengumpulan data!")
+                    return
 
-            # Ambil data dari form
-            nama = self.entry_nama.get().strip()
-            nim = self.entry_nim.get().strip()
-            jurusan = self.entry_jurusan.get().strip()
-            alamat = self.text_alamat.get("1.0", tk.END).strip()
-            jenis_kelamin = self.var_jk.get()
+                # Ambil data dari form
+                nama = self.entry_nama.get().strip()
+                nim = self.entry_nim.get().strip()
+                jurusan = self.entry_jurusan.get().strip()
+                alamat = self.text_alamat.get("1.0", tk.END).strip()
+                jenis_kelamin = self.var_jk.get()
 
-            # Validasi field kosong
-            if not nama or not nim or not jurusan:
-                messagebox.showwarning("Input Kosong", "Nama, NIM, dan Jurusan harus diisi!")
-                return
+                # Validasi field kosong
+                if not nama or not nim or not jurusan:
+                    messagebox.showwarning("Input Kosong", "Nama, NIM, dan Jurusan harus diisi!")
+                    return
 
-                # Validasi format NIM (harus angka dan minimal 8 digit)
-            if not nim.isdigit() or len(nim) < 8:
-                messagebox.showwarning("Format NIM Salah", "NIM harus berupa angka minimal 8 digit!")
-                self.entry_nim.focus_set()
-                return
+                    # Validasi format NIM (harus angka dan minimal 8 digit)
+                if not nim.isdigit() or len(nim) < 8:
+                    messagebox.showwarning("Format NIM Salah", "NIM harus berupa angka minimal 8 digit!")
+                    self.entry_nim.focus_set()
+                    return
 
-            # Validasi nama (tidak boleh hanya angka)
-            if nama.isdigit():
-                messagebox.showwarning("Format Nama Salah", "Nama tidak boleh hanya berupa angka!")
-                self.entry_nama.focus_set()
-                return
+                # Validasi nama (tidak boleh hanya angka)
+                if nama.isdigit():
+                    messagebox.showwarning("Format Nama Salah", "Nama tidak boleh hanya berupa angka!")
+                    self.entry_nama.focus_set()
+                    return
 
-            # Tampilkan hasil
-            hasil = f"Nama: {nama}\nNIM: {nim}\nJurusan: {jurusan}\nAlamat: {alamat}\nJenis Kelamin: {jenis_kelamin}"
-            messagebox.showinfo("Data Tersimpan", hasil)
+                # Tampilkan hasil
+                hasil = f"Nama: {nama}\nNIM: {nim}\nJurusan: {jurusan}\nAlamat: {alamat}\nJenis Kelamin: {jenis_kelamin}"
+                self.custom_messagebox(
+                    "Data Tersimpan",
+                    hasil,
+                    "success"
+                )
 
-            # Tampilkan hasil di label dengan info user
-            hasil_lengkap = f"BIODATA TERSIMPAN:\nDiinput oleh: {self.current_user}\n\n{hasil}"
-            self.label_hasil.config(text=hasil_lengkap)
+                # Tampilkan hasil di label dengan info user
+                hasil_lengkap = f"BIODATA TERSIMPAN:\nDiinput oleh: {self.current_user}\n\n{hasil}"
+                self.label_hasil.config(text=hasil_lengkap)
 
-        except Exception as e:
-            messagebox.showerror("Error", f"Terjadi kesalahan saat memproses data:\n{str(e)}")
+            except Exception as e:
+                self.custom_messagebox(
+                    "Error",
+                    f"Terjadi kesalahan saat memproses data:\n{str(e)}",
+                    "error"
+                )
 
     def simpan_hasil(self):
-        """Simpan hasil biodata ke file dengan error handling"""
-        try:
-            hasil_tersimpan = self.label_hasil.cget("text")
+            """Simpan hasil biodata ke file dengan error handling"""
+            try:
+                hasil_tersimpan = self.label_hasil.cget("text")
 
-            if not hasil_tersimpan or "BIODATA TERSIMPAN" not in hasil_tersimpan:
-                messagebox.showwarning("Peringatan", "Tidak ada data untuk disimpan. Mohon submit terlebih dahulu.")
-                return
+                if not hasil_tersimpan or "BIODATA TERSIMPAN" not in hasil_tersimpan:
+                    messagebox.showwarning("Peringatan", "Tidak ada data untuk disimpan. Mohon submit terlebih dahulu.")
+                    return
 
-            # Buat nama file dengan timestamp
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"biodata_{self.current_user}_{timestamp}.txt"
+                # Buat nama file dengan timestamp
+                timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                filename = f"biodata_{self.current_user}_{timestamp}.txt"
 
-            with open(filename, "w", encoding="utf-8") as file:
-                file.write(f"Data disimpan oleh: {self.current_user}\n")
-                file.write(f"Waktu penyimpanan: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-                file.write("-" * 50 + "\n")
-                file.write(hasil_tersimpan)
+                with open(filename, "w", encoding="utf-8") as file:
+                    file.write(f"Data disimpan oleh: {self.current_user}\n")
+                    file.write(f"Waktu penyimpanan: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    file.write("-" * 50 + "\n")
+                    file.write(hasil_tersimpan)
 
-            messagebox.showinfo("Info", f"Data berhasil disimpan ke file '{filename}'.")
+                messagebox.showinfo("Info", f"Data berhasil disimpan ke file '{filename}'.")
 
-        except PermissionError:
-            messagebox.showerror("Error", "Tidak memiliki izin untuk menyimpan file di lokasi ini.")
-        except Exception as e:
-            messagebox.showerror("Error", f"Terjadi kesalahan saat menyimpan file:\n{str(e)}")
+            except PermissionError:
+                messagebox.showerror("Error", "Tidak memiliki izin untuk menyimpan file di lokasi ini.")
+            except Exception as e:
+                messagebox.showerror("Error", f"Terjadi kesalahan saat menyimpan file:\n{str(e)}")
 
 
     def _reset_form_biodata(self):
-        """Mengosongkan isian formulir."""
-        self.var_nama.set("")
-        self.var_nim.set("")
-        self.var_jurusan.set("")
-        self.text_alamat.delete("1.0", tk.END)
-        self.var_jk.set("Pria")
-        self.var_setuju.set(0)
-        self.label_hasil.config(text="")
-        self.btn_submit.config(state=tk.DISABLED)
+            """Mengosongkan isian formulir."""
+            self.var_nama.set("")
+            self.var_nim.set("")
+            self.var_jurusan.set("")
+            self.text_alamat.delete("1.0", tk.END)
+            self.var_jk.set("Pria")
+            self.var_setuju.set(0)
+            self.label_hasil.config(text="")
+            self.btn_submit.config(state=tk.DISABLED)
 
 
     def keluar_aplikasi(self):
-        if messagebox.askokcancel("Keluar", "Yakin ingin menutup aplikasi?"):
-            self.destroy()
+            if messagebox.askokcancel("Keluar", "Yakin ingin menutup aplikasi?"):
+                self.destroy()
 
 
 if __name__ == "__main__":
