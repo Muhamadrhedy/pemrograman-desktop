@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-
+import datetime
 
 class AplikasiBiodata(tk.Tk):
     def __init__(self):
@@ -315,32 +315,74 @@ class AplikasiBiodata(tk.Tk):
             self.submit_data()
 
     def submit_data(self):
-        if self.var_setuju.get() == 0:
-            messagebox.showwarning(
-                "Peringatan", "Anda wajib mencentang persetujuan data."
-            )
-            return
+        """Submit data biodata dengan validasi lengkap"""
+        try:
+            # Cek checkbox
+            if self.var_setuju.get() == 0:
+                messagebox.showwarning("Peringatan", "Anda harus menyetujui pengumpulan data!")
+                return
 
-        nama = self.entry_nama.get().strip()
-        nim = self.entry_nim.get().strip()
-        jurusan = self.entry_jurusan.get().strip()
-        alamat = self.text_alamat.get("1.0", tk.END).strip()
-        jenis_kelamin = self.var_jk.get()
+            # Ambil data dari form
+            nama = self.entry_nama.get().strip()
+            nim = self.entry_nim.get().strip()
+            jurusan = self.entry_jurusan.get().strip()
+            alamat = self.text_alamat.get("1.0", tk.END).strip()
+            jenis_kelamin = self.var_jk.get()
 
-        if not alamat:
-            messagebox.showwarning("Input Kosong", "Field alamat belum diisi.")
-            self.text_alamat.focus_set()
-            return
+            # Validasi field kosong
+            if not nama or not nim or not jurusan:
+                messagebox.showwarning("Input Kosong", "Nama, NIM, dan Jurusan harus diisi!")
+                return
 
-        hasil = (
-            f"Nama: {nama}\n"
-            f"NIM: {nim}\n"
-            f"Jurusan: {jurusan}\n"
-            f"Jenis Kelamin: {jenis_kelamin}\n"
-            f"Alamat: {alamat}"
-        )
-        messagebox.showinfo("Berhasil Disimpan", hasil)
-        self.label_hasil.config(text=f"DATA TERSIMPAN:\n\n{hasil}")
+                # Validasi format NIM (harus angka dan minimal 8 digit)
+            if not nim.isdigit() or len(nim) < 8:
+                messagebox.showwarning("Format NIM Salah", "NIM harus berupa angka minimal 8 digit!")
+                self.entry_nim.focus_set()
+                return
+
+            # Validasi nama (tidak boleh hanya angka)
+            if nama.isdigit():
+                messagebox.showwarning("Format Nama Salah", "Nama tidak boleh hanya berupa angka!")
+                self.entry_nama.focus_set()
+                return
+
+            # Tampilkan hasil
+            hasil = f"Nama: {nama}\nNIM: {nim}\nJurusan: {jurusan}\nAlamat: {alamat}\nJenis Kelamin: {jenis_kelamin}"
+            messagebox.showinfo("Data Tersimpan", hasil)
+
+            # Tampilkan hasil di label dengan info user
+            hasil_lengkap = f"BIODATA TERSIMPAN:\nDiinput oleh: {self.current_user}\n\n{hasil}"
+            self.label_hasil.config(text=hasil_lengkap)
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Terjadi kesalahan saat memproses data:\n{str(e)}")
+
+    def simpan_hasil(self):
+        """Simpan hasil biodata ke file dengan error handling"""
+        try:
+            hasil_tersimpan = self.label_hasil.cget("text")
+
+            if not hasil_tersimpan or "BIODATA TERSIMPAN" not in hasil_tersimpan:
+                messagebox.showwarning("Peringatan", "Tidak ada data untuk disimpan. Mohon submit terlebih dahulu.")
+                return
+
+            # Buat nama file dengan timestamp
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"biodata_{self.current_user}_{timestamp}.txt"
+
+            with open(filename, "w", encoding="utf-8") as file:
+                file.write(f"Data disimpan oleh: {self.current_user}\n")
+                file.write(f"Waktu penyimpanan: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                file.write("-" * 50 + "\n")
+                file.write(hasil_tersimpan)
+
+            messagebox.showinfo("Info", f"Data berhasil disimpan ke file '{filename}'.")
+
+        except PermissionError:
+            messagebox.showerror("Error", "Tidak memiliki izin untuk menyimpan file di lokasi ini.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Terjadi kesalahan saat menyimpan file:\n{str(e)}")
+
 
     def _reset_form_biodata(self):
         """Mengosongkan isian formulir."""
@@ -353,20 +395,6 @@ class AplikasiBiodata(tk.Tk):
         self.label_hasil.config(text="")
         self.btn_submit.config(state=tk.DISABLED)
 
-    def simpan_hasil(self):
-        """Menulis preview data ke berkas txt."""
-        teks = self.label_hasil.cget("text")
-        if not teks or "DATA TERSIMPAN" not in teks:
-            messagebox.showwarning(
-                "Peringatan", "Belum ada data tersimpan yang dapat diekspor."
-            )
-            return
-
-        with open("biodata_tersimpan.txt", "w", encoding="utf-8") as file:
-            file.write(teks)
-        messagebox.showinfo(
-            "Berhasil", "Data berhasil diekspor ke berkas 'biodata_tersimpan.txt'."
-        )
 
     def keluar_aplikasi(self):
         if messagebox.askokcancel("Keluar", "Yakin ingin menutup aplikasi?"):
