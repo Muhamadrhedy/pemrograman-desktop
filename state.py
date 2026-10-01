@@ -1,6 +1,15 @@
 import tkinter as tk
 from tkinter import messagebox
 import datetime
+import logging
+
+# Setup logging
+logging.basicConfig(
+    filename='aplikasi_biodata.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 class AplikasiBiodata(tk.Tk):
     def __init__(self):
@@ -25,6 +34,8 @@ class AplikasiBiodata(tk.Tk):
 
         # Alur awal: kunci akses dan paksa ke halaman login
         self._pindah_ke(self.frame_login)
+        # Log aplikasi start
+        logging.info("Aplikasi dimulai")
 
     # ------------------ SISTEM FRAME & NAVIGASI ------------------
     def _pindah_ke(self, frame_tujuan):
@@ -218,7 +229,6 @@ class AplikasiBiodata(tk.Tk):
                 "<Leave>",
                 lambda e: button.config(bg=normal)
             )
-    
     def _buat_tampilan_login(self):
         self.frame_login = tk.Frame(
             master=self,
@@ -419,12 +429,20 @@ class AplikasiBiodata(tk.Tk):
             username = self.entry_username.get().strip()
             password = self.entry_password.get()
 
+            # Log attempt login
+            logging.info(f"Login attempt for username: {username}")
             if not username or not password:
+                logging.warning(f"Empty credentials attempt for username: {username}")
                 self.custom_messagebox(
                     "Peringatan",
                     "Username dan Password tidak boleh kosong.",
                     "warning"
                 )
+                self.entry_username.focus_set()
+                return
+            if len(username) < 3:
+                logging.warning(f"Username too short: {username}")
+                self.custom_messagebox("Login Gagal", "Username minimal 3 karakter.", "warning")
                 self.entry_username.focus_set()
                 return
 
@@ -433,6 +451,7 @@ class AplikasiBiodata(tk.Tk):
                 and self.users_db[username] == password
             ):
                 self.current_user = username
+                logging.info(f"Successful login for user: {username}")
                 self.custom_messagebox(
                     "Login Berhasil",
                     f"Selamat datang, {username}!",
@@ -449,6 +468,7 @@ class AplikasiBiodata(tk.Tk):
                 self.entry_username.delete(0, tk.END)
                 self.entry_password.delete(0, tk.END)
             else:
+                logging.warning(f"Failed login attempt for username: {username}")
                 self.custom_messagebox(
                     "Login Gagal",
                     "Username atau password yang dimasukkan salah.",
@@ -458,6 +478,7 @@ class AplikasiBiodata(tk.Tk):
                 self.entry_username.focus_set()
 
     def _logout(self):
+            logging.info(f"User logout: {self.current_user}")
             if messagebox.askyesno(
                 "Konfirmasi Logout", f"Yakin ingin keluar dari akun {self.current_user}?"
             ):
@@ -924,12 +945,13 @@ class AplikasiBiodata(tk.Tk):
                     hasil,
                     "success"
                 )
-
+                logging.info(f"Data submitted by user: {self.current_user} - NIM: {nim}")
                 # Tampilkan hasil di label dengan info user
                 hasil_lengkap = f"BIODATA TERSIMPAN:\nDiinput oleh: {self.current_user}\n\n{hasil}"
                 self.label_hasil.config(text=hasil_lengkap)
 
             except Exception as e:
+                logging.error(f"Error in submit_data by {self.current_user}: {str(e)}")
                 self.custom_messagebox(
                     "Error",
                     f"Terjadi kesalahan saat memproses data:\n{str(e)}",
@@ -976,6 +998,7 @@ class AplikasiBiodata(tk.Tk):
 
 
     def keluar_aplikasi(self):
+            logging.info(f"Application closed by user: {self.current_user}")
             if messagebox.askokcancel("Keluar", "Yakin ingin menutup aplikasi?"):
                 self.destroy()
 

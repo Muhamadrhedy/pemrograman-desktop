@@ -1,0 +1,20 @@
+2026-10-01 12:59:24 - INFO - Login attempt for username: assa
+2026-10-01 12:59:24 - WARNING - Failed login attempt for username: assa
+2026-10-01 12:59:52 - INFO - Login attempt for username: admin
+2026-10-01 12:59:52 - INFO - Successful login for user: admin
+2026-10-01 13:07:34 - INFO - Aplikasi dimulai
+2026-10-01 13:07:48 - INFO - Aplikasi dimulai
+2026-10-01 13:07:51 - INFO - Aplikasi dimulai
+2026-10-01 13:07:55 - INFO - Aplikasi dimulai
+2026-10-01 13:08:01 - INFO - Login attempt for username: admin
+2026-10-01 13:08:01 - INFO - Successful login for user: admin
+2026-10-01 13:08:26 - INFO - Data submitted by user: admin - NIM: 12345678
+2026-10-01 13:08:42 - INFO - Application closed by user: admin
+2026-10-01 13:26:58 - INFO - Aplikasi dimulai
+2026-10-01 13:27:08 - INFO - Login attempt for username: admin
+2026-10-01 13:27:08 - INFO - Successful login for user: admin
+2026-10-01 13:27:19 - INFO - User logout: admin
+2026-10-01 13:27:25 - INFO - Login attempt for username: e
+2026-10-01 13:27:25 - WARNING - Username too short: e
+2026-10-01 13:27:33 - INFO - Login attempt for username: aededede
+2026-10-01 13:27:33 - WARNING - Failed login attempt for username: aededede
