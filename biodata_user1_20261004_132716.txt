@@ -1,0 +1,11 @@
+Data disimpan oleh: user1
+Waktu penyimpanan: 2026-10-04 13:27:16
+--------------------------------------------------
+BIODATA TERSIMPAN:
+Diinput oleh: user1
+
+Nama: user
+NIM: 10101202
+Jurusan: Informatika
+Alamat: aaaa
+Jenis Kelamin: Wanita

@@ -18,3 +18,12 @@
 2026-10-01 13:27:25 - WARNING - Username too short: e
 2026-10-01 13:27:33 - INFO - Login attempt for username: aededede
 2026-10-01 13:27:33 - WARNING - Failed login attempt for username: aededede
+2026-10-04 13:26:00 - INFO - Aplikasi dimulai
+2026-10-04 13:26:06 - INFO - Login attempt for username: admin
+2026-10-04 13:26:06 - INFO - Successful login for user: admin
+2026-10-04 13:26:09 - INFO - User logout: admin
+2026-10-04 13:26:45 - INFO - Aplikasi dimulai
+2026-10-04 13:26:54 - INFO - Login attempt for username: user1
+2026-10-04 13:26:54 - INFO - Successful login for user: user1
+2026-10-04 13:27:12 - INFO - Data submitted by user: user1 - NIM: 10101202
+2026-10-04 13:27:21 - INFO - User logout: user1
