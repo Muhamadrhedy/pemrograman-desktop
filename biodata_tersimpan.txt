@@ -1,7 +1,7 @@
 BIODATA TERSIMPAN:
 
-Nama: a
-NIM: a
-Jurusan: a
-Alamat: a
-Jenis Kelamin: Wanita
+Nama: aa
+NIM: aa
+Jurusan: aa
+Alamat: aa
+Jenis Kelamin: Pria
