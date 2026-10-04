@@ -1,0 +1,14 @@
+Data disimpan oleh: admin
+Waktu penyimpanan: 2026-10-04 13:45:43
+--------------------------------------------------
+BIODATA TERSIMPAN:
+Diinput oleh: admin
+
+Nama: aa
+NIM: 00000000
+Jurusan: aa
+Email: a@gmail.com
+Telepon: 08569369912
+Tanggal Lahir: 23/06/2008
+Alamat: aa
+Jenis Kelamin: Pria

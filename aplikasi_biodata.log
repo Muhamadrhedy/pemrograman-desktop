@@ -27,3 +27,14 @@
 2026-10-04 13:26:54 - INFO - Successful login for user: user1
 2026-10-04 13:27:12 - INFO - Data submitted by user: user1 - NIM: 10101202
 2026-10-04 13:27:21 - INFO - User logout: user1
+2026-10-04 13:40:45 - INFO - Aplikasi dimulai
+2026-10-04 13:41:04 - INFO - Login attempt for username: admin
+2026-10-04 13:41:04 - INFO - Successful login for user: admin
+2026-10-04 13:42:53 - INFO - Data submitted by user: admin - NIM: 00000000
+2026-10-04 13:44:22 - INFO - Aplikasi dimulai
+2026-10-04 13:44:28 - INFO - Login attempt for username: admin
+2026-10-04 13:44:28 - WARNING - Failed login attempt for username: admin
+2026-10-04 13:44:32 - INFO - Login attempt for username: admin
+2026-10-04 13:44:32 - INFO - Successful login for user: admin
+2026-10-04 13:45:34 - INFO - Data submitted by user: admin - NIM: 00000000
+2026-10-04 13:46:15 - INFO - Application closed by user: admin
