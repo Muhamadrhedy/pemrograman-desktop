@@ -1,0 +1,11 @@
+Data disimpan oleh: admin
+Waktu penyimpanan: 2026-10-04 13:23:22
+--------------------------------------------------
+BIODATA TERSIMPAN:
+Diinput oleh: admin
+
+Nama: swdwed
+NIM: 4888888888
+Jurusan: dede
+Alamat: dede
+Jenis Kelamin: Wanita
