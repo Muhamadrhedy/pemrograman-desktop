@@ -1,0 +1,112 @@
+[
+  {
+    "pertanyaan": "Tipe data apa yang digunakan untuk menyimpan teks di Python?",
+    "pilihan": [
+      "int",
+      "str",
+      "float",
+      "bool"
+    ],
+    "jawaban": 1,
+    "penjelasan": "str (string) digunakan untuk menyimpan teks."
+  },
+  {
+    "pertanyaan": "Simbol apa yang digunakan untuk komentar satu baris di Python?",
+    "pilihan": [
+      "//",
+      "<!--",
+      "#",
+      "/*"
+    ],
+    "jawaban": 2,
+    "penjelasan": "Tanda # digunakan untuk komentar satu baris di Python."
+  },
+  {
+    "pertanyaan": "Manakah cara yang benar untuk membuat sebuah fungsi?",
+    "pilihan": [
+      "function halo():",
+      "def halo():",
+      "func halo():",
+      "create halo():"
+    ],
+    "jawaban": 1,
+    "penjelasan": "Fungsi didefinisikan menggunakan kata kunci def."
+  },
+  {
+    "pertanyaan": "Apa hasil dari ekspresi 3 ** 2 di Python?",
+    "pilihan": [
+      "5",
+      "6",
+      "9",
+      "8"
+    ],
+    "jawaban": 2,
+    "penjelasan": "Operator ** adalah operator pangkat, sehingga 3 ** 2 menghasilkan 9."
+  },
+  {
+    "pertanyaan": "Struktur data mana yang ditulis menggunakan tanda kurung siku []?",
+    "pilihan": [
+      "tuple",
+      "list",
+      "set",
+      "dictionary"
+    ],
+    "jawaban": 1,
+    "penjelasan": "List ditulis dengan tanda kurung siku, misalnya [1, 2, 3]."
+  },
+  {
+    "pertanyaan": "Kata kunci apa yang digunakan untuk percabangan alternatif?",
+    "pilihan": [
+      "otherwise",
+      "elseif",
+      "elif",
+      "caseif"
+    ],
+    "jawaban": 2,
+    "penjelasan": "Python menggunakan elif untuk kondisi alternatif setelah if."
+  },
+  {
+    "pertanyaan": "Apa fungsi len() pada sebuah string atau list?",
+    "pilihan": [
+      "Mengurutkan isinya",
+      "Menghitung jumlah elemennya",
+      "Menghapus elemen terakhir",
+      "Mengubahnya menjadi teks"
+    ],
+    "jawaban": 1,
+    "penjelasan": "len() mengembalikan jumlah karakter atau elemen."
+  },
+  {
+    "pertanyaan": "Library bawaan Python yang digunakan untuk membuat GUI sederhana adalah ...",
+    "pilihan": [
+      "Tkinter",
+      "NumPy",
+      "Flask",
+      "Pandas"
+    ],
+    "jawaban": 0,
+    "penjelasan": "Tkinter merupakan antarmuka Python untuk toolkit GUI Tcl/Tk."
+  },
+  {
+    "pertanyaan": "Method Tkinter apa yang biasanya digunakan untuk menjalankan event loop jendela?",
+    "pilihan": [
+      "startloop()",
+      "run()",
+      "mainloop()",
+      "windowloop()"
+    ],
+    "jawaban": 2,
+    "penjelasan": "mainloop() menjaga jendela tetap aktif dan memproses event."
+  },
+  {
+    "pertanyaan": "Apa fungsi utama StringVar dalam Tkinter?",
+    "pilihan": [
+      "Menggambar bentuk pada Canvas",
+      "Menghubungkan nilai string dengan widget",
+      "Menutup aplikasi otomatis",
+      "Mengatur ukuran jendela"
+    ],
+    "jawaban": 1,
+    "penjelasan": "StringVar menyimpan nilai string yang dapat dihubungkan dengan widget Tkinter."
+  }
+]
