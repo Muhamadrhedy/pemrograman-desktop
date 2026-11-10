@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from repository import KaryawanRepository
+from repository import KaryawanRepository, GajiRepository
 from views.karyawan import KaryawanView
 from views.gaji import GajiView
 
@@ -15,6 +15,10 @@ class PenggajianApp(tk.Tk):
     def buat_tampilan(self):
         self.content = ttk.Frame(self,padding=20)
         self.content.pack(fill="both",expand=True)
+        bar = tk.Menu(self)
+        file = tk.Menu(bar,tearoff=False)
+        file.add_command(label="Dashboard",command=self.dashboard)
+        file.add_separator();file.add_command(label="Keluar",command=self.keluar)
         bar = tk.Menu(self)
         file = tk.Menu(bar,tearoff=False)
         file.add_command(label="Dashboard",command=self.dashboard)
@@ -51,7 +55,7 @@ class PenggajianApp(tk.Tk):
 
     def proses_gaji(self):
         self.bersihkan()
-        GajiView(self.content,KaryawanRepository()).pack(fill="both",expand=True)
+        GajiView(self.content,KaryawanRepository(),GajiRepository()).pack(fill="both",expand=True)
 
     def dashboard(self):self.placeholder("Dashboard Penggajian")
 
