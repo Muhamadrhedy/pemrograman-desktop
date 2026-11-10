@@ -1,0 +1,12 @@
+SLIP GAJI — SIMULASI PRAKTIKUM
+ID: 1 | Periode: 2026-10
+NIK: K001
+Nama: Budi Santoso
+Jabatan: Staff
+Lembur: 10 jam x Rp 25.000
+Gaji pokok: Rp 5.000.000
+Tunjangan: Rp 500.000
+Uang lembur: Rp 250.000
+Bruto: Rp 5.750.000
+Potongan: Rp 100.000
+Gaji bersih: Rp 5.650.000
