@@ -42,7 +42,7 @@ class Karyawan:
 
     @classmethod
     def dari_form(cls, data):
-        nik = teks(data["nik"], "Nomor Induk Karyawan", 20)
+        nik = teks(data["nik"], "NIK internal", 20)
         if not re.fullmatch(r"[A-Za-z0-9-]+", nik):
             raise ValueError("NIK internal hanya huruf, angka, atau tanda hubung.")
         aktif = angka(data["aktif"], "Status aktif", 1)
@@ -50,3 +50,17 @@ class Karyawan:
                    teks(data["jabatan"], "Jabatan", 60),
                    angka(data["gaji_pokok"], "Gaji pokok"),
                    angka(data["tunjangan"], "Tunjangan"), aktif)
+
+def hitung_gaji(pokok, tunjangan, jam, tarif, potongan):
+    pokok = angka(pokok, "Gaji pokok")
+    tunjangan = angka(tunjangan, "Tunjangan")
+    jam = angka(jam, "Jam lembur", 200)
+    tarif = angka(tarif, "Tarif lembur per jam", 1_000_000)
+    potongan = angka(potongan, "Potongan")
+    lembur = jam * tarif
+    bruto = pokok + tunjangan + lembur
+    if potongan > bruto:
+        raise ValueError("Potongan tidak boleh melebihi penghasilan bruto.")
+    return dict(gaji_pokok=pokok, tunjangan=tunjangan, jam_lembur=jam,
+                tarif_lembur=tarif, uang_lembur=lembur, potongan=potongan,
+                bruto=bruto, netto=bruto-potongan)

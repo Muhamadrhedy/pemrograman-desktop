@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from repository import KaryawanRepository
 from views.karyawan import KaryawanView
+from views.gaji import GajiView
 
 class PenggajianApp(tk.Tk):
     def __init__(self):
@@ -23,7 +24,7 @@ class PenggajianApp(tk.Tk):
         master.add_command(label="Data Karyawan",command=self.data_karyawan)
         bar.add_cascade(label="Master Data",menu=master)
         transaksi = tk.Menu(bar,tearoff=False)
-        transaksi.add_command(label="Proses Gaji",command=lambda:self.placeholder("Proses Gaji"))
+        transaksi.add_command(label="Proses Gaji",command=self.proses_gaji)
         bar.add_cascade(label="Transaksi",menu=transaksi)
         laporan = tk.Menu(bar,tearoff=False)
         laporan.add_command(label="Riwayat, Slip, dan Rekap",command=lambda:self.placeholder("Laporan"))
@@ -33,6 +34,7 @@ class PenggajianApp(tk.Tk):
         bar.add_cascade(label="Bantuan",menu=bantuan)
         self.config(menu=bar)
         self.protocol("WM_DELETE_WINDOW",self.keluar)
+
 
     def bersihkan(self):
         for child in self.content.winfo_children():child.destroy()
@@ -46,6 +48,10 @@ class PenggajianApp(tk.Tk):
     def data_karyawan(self):
         self.bersihkan()
         KaryawanView(self.content,KaryawanRepository()).pack(fill="both",expand=True)
+
+    def proses_gaji(self):
+        self.bersihkan()
+        GajiView(self.content,KaryawanRepository()).pack(fill="both",expand=True)
 
     def dashboard(self):self.placeholder("Dashboard Penggajian")
 
