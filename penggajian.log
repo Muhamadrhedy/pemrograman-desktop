@@ -1,0 +1,15 @@
+2026-11-10 11:59:59,001 ERROR Operasi aplikasi gagal
+Traceback (most recent call last):
+  File "D:\kuliah\Semester 5\Pemrograman Desktop\praktikum\prak16\ui_common.py", line 11, in aman
+    return aksi()
+           ^^^^^^
+  File "D:\kuliah\Semester 5\Pemrograman Desktop\praktikum\prak16\views\karyawan.py", line 55, in proses
+    self.repo.simpan(Karyawan.dari_form(data),row.get("id"))
+  File "D:\kuliah\Semester 5\Pemrograman Desktop\praktikum\prak16\repository.py", line 50, in simpan
+    cur.execute("""
+  File "C:\Users\ADVAN\AppData\Roaming\Python\Python312\site-packages\psycopg\cursor.py", line 117, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.DatatypeMismatch: column "aktif" is of type boolean but expression is of type smallint
+LINE 10:                             VALUES ($1, $2, $3, $4, $5, $6)
+                                                                 ^
+HINT:  You will need to rewrite or cast the expression.
